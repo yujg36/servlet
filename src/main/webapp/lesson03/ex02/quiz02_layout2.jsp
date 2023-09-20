@@ -23,6 +23,9 @@ footer {height: 50px;}
 .menu .menu-link-text {color:black; font-weight: bold;}
 </Style>
 
+</head>
+
+<body>
 <%
 // 아티스트 정보 
 
@@ -103,8 +106,17 @@ footer {height: 50px;}
     musicList.add(musicInfo);
 %>
 
-</head>
-<body>
+<%
+		int id = Integer.parseInt(request.getParameter("id"));
+		Map<String, Object> target = null;
+		for (Map<String, Object> item : musicList) {
+			if (id == (int)item.get("id")) {
+				target = item;
+				break;
+			}
+		}
+		out.print(target);
+%>
 	<div id="wrap" class="container">
 		<header class="d-flex">
 			 <div class="logo col-3 d-flex align-items-center">
@@ -130,29 +142,8 @@ footer {height: 50px;}
 		</nav>
 		
 		<section class="contents d-flex border border-success">
-		<%
-		int id = Integer.parseInt(request.getParameter("id"));
-		Map<String, Object> target = new HashMap<>();
-		for (Map<String, Object> item : musicList) {
-			if ((Integer) item.get("id") == id) {
-				target = item;
-				break;
-			}
-		}
 		
-	%>
-			 <div class="container">
-				<div class="d-flex">
-					<div>
-						
-					</div>
-					<div class="ml-3">
-						<span class="display-1 font-weight-bold d-block"><%=target.get("title") %></span>
-						<span class="display-3 text-info d-block"><%=target.get("singer") %></span>
-						<span class="display-4 text-secondary d-block"><%=target.get("composer") %></span>
-					</div>
-				</div>
-			</div>
+			 
          </section>
          <h3 class="mt-4"><b>가사</b></h3>
 			<table class="table">

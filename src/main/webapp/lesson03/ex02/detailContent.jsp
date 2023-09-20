@@ -1,28 +1,7 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>멜롱차트</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-<Style>
-header {height:80px;}
-nav {height: 50px;}
-.contents {min-height: 100px;}
-footer {height: 50px;}
-.menu .menu-link-text {color:black; font-weight: bold;}
-</Style>
-
+	pageEncoding="UTF-8"%>
+<%@page import="java.util.List"*%>	
 <%
 // 아티스트 정보 
 
@@ -103,55 +82,49 @@ footer {height: 50px;}
     musicList.add(musicInfo);
 %>
 
-</head>
-<body>
-	<div id="wrap" class="container">
-		<header class="d-flex">
-			 <jsp:include page="/lesson03/ex02/quiz02_header.jsp" />
-		</header>
-		<nav class="menu">
-			<jsp:include page="/quiz02_menu.jsp"/>
-		</nav>
-		<section class="contents d-flex border border-success">
-			 <section class="col-4 pt-2 mb-2 d-flex">
-                    <img src="<%= artistInfo.get("photo") %>" alt="아이유 사진" width="120" height="130">
-                    <div class="ml-3">
-	                   <h4><b><%=artistInfo.get("name") %></b></h4>
-	                   <div><%=artistInfo.get("agency") %></div>
-	                   <div><%=artistInfo.get("debute") %>데뷔</div>
-            		</div>	
-             </section>
-         </section>
-         <section>
-         <h4 class="mt-4 font-weight-bold">곡 목록</h4>
-			<table class="table text-center">
-			<thead>
-				<tr> 
-					<th>no</th>
-					<th>제목</th>
-					<th>앨범</th>
-				</tr>
-			</thead>
-			<tbody>
-			<%
+<%
+		int id = Integer.parseInt(request.getParameter("id"));
+		Map<String, Object> target = null;
+		for (Map<String, Object> item : musicList) {
+			if (id == (int)item.get("id")) {
+				target = item;
+				break;
+			}
+		}
+		out.print(target);
+		
+		if(request.getParameter("search") != null){
+			String search = request.getParameter("search");
+			for (Map<String, Object> item : musicList) {
 				
-				for (Map<String, Object> item : musicList) {
-			%>	
-				<tr>
-					<td><%=item.get("id") %></td>
-					<td><a href="/lesson03/ex02/quiz02_layout2.jsp?id=<%=item.get("id") %>" class="text-decoration-none"><%=item.get("title") %></a></td>
-					<td><%=item.get("album") %></td>
-					
-				</tr>
-			<%
-				}
-			%>
-			</tbody>
-			</table>
-		</section>
-		<footer>
-			Copyright © Melong 2023 All Rights Reserved
-		</footer>
+			}
+		}
+%>
+<div class="container">
+	<div class="d-flex">
+		<div>
+			<img src="<%=target.get("thumbnail")%>" alt="앨범커버" width="120"
+				height="130">
+		</div>
+		<div class="ml-3">
+			<div class="display-4"><%=target.get("title")%></div>
+			<div class="text-success font-weight-bold"><%=target.get("singer")%></div>
+			<div class="d-flex text-secondary">
+				<div class="mr-4">
+					<div>앨범</div>
+					<div>재생시간</div>
+					<div>작곡가</div>
+					<div>작사가</div>
+				</div>
+				<div>
+					<div><%=target.get("album")%></div>
+					<div><%=(int) target.get("time") / 60%>
+						:
+						<%=(int) target.get("time") / 60%></div>
+					<div><%=target.get("composer")%></div>
+					<div><%=target.get("lyricist")%></div>
+				</div>
+			</div>
+		</div>
 	</div>
-</body>
-</html>
+</div>
